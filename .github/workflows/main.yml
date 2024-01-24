@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: CI/CD Pipeline
 
 on:
   push:
@@ -6,8 +6,23 @@ on:
       - main
 
 jobs:
+  test-backend:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2.5.0
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build and test with Maven
+        working-directory: ./simple-api  # Set the working directory to your Java project directory
+        run: mvn clean install --batch-mode --show-version --errors
+  
   build-and-push-docker-image:
-    needs: test-backend # Ensure 'test-backend' is a defined job in this workflow
+    needs: test-backend
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -22,8 +37,6 @@ jobs:
           context: ./simple-api
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
           push: ${{ github.ref == 'refs/heads/main' }}
-
-      # Add similar steps for database and httpd, ensuring correct indentation and structure
 
       - name: Build image and push database
         uses: docker/build-push-action@v3
