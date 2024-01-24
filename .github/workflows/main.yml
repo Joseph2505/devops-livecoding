@@ -7,35 +7,34 @@ on:
 
 jobs:
   build-and-push-docker-image:
-    needs: test-backend
+    needs: test-backend # Ensure 'test-backend' is a defined job in this workflow
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.5.0
 
       - name: Login to DockerHub
-        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
       - name: Build image and push backend
         uses: docker/build-push-action@v3
         with:
           context: ./simple-api
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
           push: ${{ github.ref == 'refs/heads/main' }}
-      
-      # Add similar steps for database and httpd
-      # Make sure to change the context and tags accordingly
+
+      # Add similar steps for database and httpd, ensuring correct indentation and structure
 
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
           context: ./path-to-database-directory
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-database:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
           context: ./path-to-httpd-directory
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-httpd:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           push: ${{ github.ref == 'refs/heads/main' }}
