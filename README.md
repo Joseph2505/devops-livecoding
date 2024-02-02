@@ -264,4 +264,4 @@ jobs:
 ```
 # Setup Quality Gate
 Set up your pipeline to use SonarCloud analysis while testing.
-![image](https://github.com/Joseph2505/devops-livecoding.git/assets/Capture.PNG)
+![Optional Image Alt Text](assets/Capture.PNG)
