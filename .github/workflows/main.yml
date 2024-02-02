@@ -19,7 +19,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B verify sonar:sonar -Dsonar.projectKey=live-coding_joseph-live-coding -Dsonar.organization= live-coding -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./simple-api/pom.xml
+      run: mvn -B verify sonar:sonar -Dsonar.projectKey=live-coding_joseph-live-coding -Dsonar.organization=live-coding -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./simple-api/pom.xml
 
   build-and-push-docker-image:
     needs: test-backend
